@@ -2,7 +2,7 @@
 - name: Install Windows Exporter
   hosts: 172.16.0.176
   become: yes
-  become_method: winrm
+  become_user: Administrator
   tasks:
     - name: Download Windows Exporter
       win_get_url:
