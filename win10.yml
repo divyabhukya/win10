@@ -17,7 +17,7 @@
       win_shell: >
         New-Service -Name "Prometheus-Windows-Exporter" -BinaryPathName
         "C:\Prometheus\windows_exporter.exe
-        --collectors.enabled="cpu,logon,logical_disk,mem,net,os,system,thermal_zone""
+        --collectors.enabled='cpu,logon,logical_disk,mem,net,os,system,thermal_zone'"
         -DisplayName "Prometheus Windows Exporter" -Description "Prometheus
         Windows Exporter Service" -StartupType Automatic
       when: download_result.changed
@@ -26,3 +26,4 @@
         name: Prometheus-Windows-Exporter
         state: started
       when: download_result.changed
+
