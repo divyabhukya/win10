@@ -1,6 +1,6 @@
 ---
 - name: Install Windows Exporter
-  hosts: 172.16.0.176
+  hosts: 192.168.210.38
   become: yes
   become_method: runas
   tasks:
