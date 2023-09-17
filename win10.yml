@@ -3,7 +3,6 @@
   hosts: 192.168.210.38
   become: yes
   become_method: runas
-  become_user: Administrator  # Replace with the appropriate Windows user account
   tasks:
     - name: Download Windows Exporter
       win_get_url:
@@ -29,3 +28,5 @@
         name: Prometheus-Windows-Exporter
         state: started
       when: download_result.changed
+
+
