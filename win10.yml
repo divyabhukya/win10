@@ -3,30 +3,28 @@
   hosts: 192.168.210.38
   become: yes
   become_method: runas
+  become_user: Administrator
   tasks:
     - name: Download Windows Exporter
       win_get_url:
         url: https://github.com/prometheus-community/windows_exporter/releases/download/v0.18.1/windows_exporter-0.18.1-amd64.exe
         dest: C:\Prometheus\windows_exporter.exe
       register: download_result
-
     - name: Ensure Prometheus Directory Exists
       win_file:
         path: C:\Prometheus
         state: directory
-
     - name: Create Windows Exporter Service
       win_shell: >
         New-Service -Name "Prometheus-Windows-Exporter" -BinaryPathName
         "C:\Prometheus\windows_exporter.exe
         --collectors.enabled='cpu,logon,logical_disk,mem,net,os,system,thermal_zone'"
-        -DisplayName "Prometheus Windows Exporter" -Description "Prometheus Windows Exporter Service" -StartupType Automatic
+        -DisplayName "Prometheus Windows Exporter" -Description "Prometheus
+        Windows Exporter Service" -StartupType Automatic
       when: download_result.changed
-
     - name: Start Windows Exporter Service
       win_service:
         name: Prometheus-Windows-Exporter
         state: started
       when: download_result.changed
-
 
