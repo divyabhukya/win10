@@ -5,23 +5,20 @@
   tasks:
     - name: Stop Windows Exporter Service
       win_service:
-        name: "Windows-Exporter"
+        name: Windows-Exporter
         state: stopped
-      ignore_errors: yes  # Ignore errors if the service is not running or doesn't exist
-
+      ignore_errors: yes
     - name: Delete Windows Exporter Service
       win_shell: |
         Stop-Service "Windows-Exporter" -Force
         Remove-Service "Windows-Exporter" -Force
-      ignore_errors: yes  # Ignore errors if the service doesn't exist
-
+      ignore_errors: yes
     - name: Delete Prometheus Exporter Directory
       win_file:
-        path: "C:\PrometheusExporter\windows_exporter.exe"
+        path: C:\PrometheusExporter\windows_exporter.exe
         state: absent
-      ignore_errors: yes  # Ignore errors if the directory doesn't exist
-
+      ignore_errors: yes
     - name: Unregister Windows Exporter Executable
       win_command: |
         regsvr32.exe /u "C:\PrometheusExporter\windows_exporter.exe"
-      ignore_errors: yes  # Ignore errors if the executable is not registered or doesn't exist
+      ignore_errors: yes
