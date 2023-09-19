@@ -1,6 +1,6 @@
 ---
 - name: Install Prometheus Windows Exporter
-  hosts: 10.10.5.184  # Replace with the hostname or IP of your Windows 10 machine
+  hosts: 10.10.5.183  # Replace with the hostname or IP of your Windows 10 machine
   gather_facts: no
   tasks:
     - name: Create Exporter Directory
