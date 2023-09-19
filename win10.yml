@@ -1,7 +1,8 @@
+
 ---
-- name: Install and Configure Prometheus Windows Exporter
-  hosts: 10.10.5.181  # Replace with your target Windows host's IP or hostname
-  gather_facts: no
+- name: Install Prometheus Windows Exporter
+  hosts: 10.10.5.181
+  gather_facts: no  # Disable facts gathering as it's not needed for this task
   tasks:
     - name: Create Exporter Directory
       win_file:
@@ -16,14 +17,17 @@
 
     - name: Create Windows Exporter Service
       win_shell: |
-        New-Service -Name "windows_exporter" -BinaryPathName "C:\PrometheusExporter\windows_exporter.exe --collectors.enabled=default"
+        New-Service -Name "Windows-Exporter" -BinaryPathName "C:\PrometheusExporter\windows_exporter.exe --collectors.enabled=default"
+        Start-Service "Windows-Exporter"
       when: download_result.changed
 
-    - name: Start Windows Exporter Service
-      win_shell: Start-Service "windows_exporter"
-      when: download_result.changed
-
-    - name: Verify Windows Exporter Service is Running
+    - name: Set Windows Exporter to Auto-Start
       win_service:
-        name: "windows_exporter"
+        name: "Windows-Exporter"
+        start_mode: auto
+      when: download_result.changed
+
+    - name: Verify Windows Exporter is Running
+      win_service:
+        name: "Windows-Exporter"
         state: started
