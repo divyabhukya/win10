@@ -1,27 +1,33 @@
 ---
-- name: Delete Windows Exporter Service
+- name: Uninstall Prometheus Windows Exporter
   hosts: 10.10.5.181
-  gather_facts: no  # Disable facts gathering as it's not needed for this task
-
+  gather_facts: no
   tasks:
     - name: Stop Windows Exporter Service
       win_service:
-        name: windows_exporter
+        name: "windows_exporter"
         state: stopped
-      ignore_errors: yes  # Ignore errors if the service is not found or already stopped
+      ignore_errors: yes  # Ignore errors if the service is not running or doesn't exist
 
-    - name: Delete Windows Exporter Service
+    - name: Check if Windows Exporter Service exists
+      win_command: |
+        sc.exe query | find "windows_exporter"
+      register: service_query_result
+      changed_when: false
+      failed_when: false
+
+    - name: Delete Windows Exporter Service (if it exists)
       win_shell: |
         sc.exe delete windows_exporter
-      ignore_errors: yes  # Ignore errors if the service does not exist
+      when: '"SERVICE_NAME" in service_query_result.stdout'
 
-    - name: Verify Windows Exporter Service is Deleted
-      win_shell: |
-        sc.exe query state= all | find "windows_exporter"
-      register: service_query_result
-      failed_when: false
-      changed_when: false
+    - name: Delete Prometheus Exporter Directory
+      win_file:
+        path: "C:\PrometheusExporter"
+        state: absent
+      ignore_errors: yes  # Ignore errors if the directory doesn't exist
 
-    - name: Print Service Query Result
-      debug:
-        var: service_query_result.stdout_lines
+    - name: Unregister Windows Exporter Executable
+      win_command: |
+        regsvr32.exe /u "C:\PrometheusExporter\windows_exporter.exe"
+      ignore_errors: yes  # Ignore errors if the executable is not registered or doesn't exist
