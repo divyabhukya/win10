@@ -17,7 +17,7 @@
 
     - name: Delete Prometheus Exporter Directory
       win_file:
-        path: "C:\PrometheusExporter"
+        path: "C:\PrometheusExporter\windows_exporter.exe"
         state: absent
       ignore_errors: yes  # Ignore errors if the directory doesn't exist
 
