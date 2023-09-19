@@ -8,22 +8,19 @@
         name: Windows-Exporter
       register: service_info
       ignore_errors: yes
-
     - name: Stop Windows-Exporter service if it exists
       win_service:
         name: Windows-Exporter
         state: stopped
       when: service_info.exists
-
     - name: Remove Windows-Exporter service if it exists
       win_shell: |
         if (Get-Service "Windows-Exporter" -ErrorAction SilentlyContinue) {
           Remove-Service -Name "Windows-Exporter" -Force
         }
       when: service_info.exists
-
     - name: Delete Prometheus Exporter Directory
       win_file:
-        path: "C:\PrometheusExporter\windows_exporter.exe"
+        path: C:\PrometheusExporter\windows_exporter
         state: absent
       ignore_errors: yes
