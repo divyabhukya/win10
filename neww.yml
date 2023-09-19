@@ -6,19 +6,17 @@
       win_service:
         name: Prometheus-Windows-Exporter
         state: stopped
-      ignore_errors: yes  # Ignore errors if the service is not running or doesn't exist
-
+      ignore_errors: yes
     - name: Uninstall Prometheus Windows Exporter
-      win_command: |
-        "C:\PrometheusExporter\windows_exporter.exe"  # Replace with the actual path to the uninstallation utility
-      ignore_errors: yes  # Ignore errors if the uninstallation utility is not found or doesn't exist
-
+      win_command: >
+        "C:\PrometheusExporter\windows_exporter.exe"  # Replace with the
+        actual path to the uninstallation utility
+      ignore_errors: yes
     - name: Delete Prometheus Windows Exporter Directory
       win_file:
-        path: "C:\PrometheusExporter\windows_exporter.exe"  # Replace with the actual path to the exporter directory
+        path: C:P rometheusExporter\windows_exporter.exe
         state: absent
-      ignore_errors: yes  # Ignore errors if the directory doesn't exist
-
+      ignore_errors: yes
     - name: Delete Prometheus Windows Exporter Service
       win_service:
         name: Prometheus-Windows-Exporter
