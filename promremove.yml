@@ -1,0 +1,14 @@
+---
+- name: Delete Prometheus Windows Exporter Service
+  hosts: 10.10.5.181
+  tasks:
+    - name: Stop Prometheus Windows Exporter Service
+      win_service:
+        name: Prometheus-Windows-Exporter
+        state: stopped
+      ignore_errors: yes  # Ignore errors if the service is not running or doesn't exist
+
+    - name: Delete Prometheus Windows Exporter Service
+      win_service:
+        name: Prometheus-Windows-Exporter
+        state: absent
