@@ -1,0 +1,27 @@
+---
+- name: Delete Windows Exporter Service
+  hosts: 10.10.5.181
+  gather_facts: no  # Disable facts gathering as it's not needed for this task
+
+  tasks:
+    - name: Stop Windows Exporter Service
+      win_service:
+        name: windows_exporter
+        state: stopped
+      ignore_errors: yes  # Ignore errors if the service is not found or already stopped
+
+    - name: Delete Windows Exporter Service
+      win_shell: |
+        sc.exe delete windows_exporter
+      ignore_errors: yes  # Ignore errors if the service does not exist
+
+    - name: Verify Windows Exporter Service is Deleted
+      win_shell: |
+        sc.exe query state= all | find "windows_exporter"
+      register: service_query_result
+      failed_when: false
+      changed_when: false
+
+    - name: Print Service Query Result
+      debug:
+        var: service_query_result.stdout_lines
