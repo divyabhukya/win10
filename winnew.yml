@@ -1,18 +1,18 @@
 ---
 - name: Uninstall Prometheus Windows Exporter
-  hosts: 10.10.5.181  # Replace with your target Windows host's IP or hostname
+  hosts: 10.10.5.181
   gather_facts: no
   tasks:
     - name: Stop Windows Exporter Service
       win_service:
-        name: "windows_exporter"
+        name: "Windows-Exporter"
         state: stopped
       ignore_errors: yes  # Ignore errors if the service is not running or doesn't exist
 
-    - name: Delete Windows Exporter Service
+    - name: Remove Windows Exporter Service
       win_shell: |
-        Stop-Service "windows_exporter" -Force
-        Remove-Service "windows_exporter" -Force
+        sc.exe stop "Windows-Exporter"
+        sc.exe delete "Windows-Exporter"
       ignore_errors: yes  # Ignore errors if the service doesn't exist
 
     - name: Delete Prometheus Exporter Directory
@@ -25,3 +25,4 @@
       win_command: |
         regsvr32.exe /u "C:\PrometheusExporter\windows_exporter.exe"
       ignore_errors: yes  # Ignore errors if the executable is not registered or doesn't exist
+
