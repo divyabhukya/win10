@@ -11,20 +11,16 @@
 
     - name: Uninstall Prometheus Windows Exporter
       win_shell: |
-        # Uninstall the service (if it exists)
-        $serviceName = "windows_exporter"
-        $service = Get-Service -Name $serviceName -ErrorAction SilentlyContinue
-        if ($service) {
-            $service | Stop-Service -Force
-            $service | Remove-Service -ErrorAction SilentlyContinue
-        }
+        # Uninstall the service (if it exists) using sc command
+        sc stop windows_exporter
+        sc delete windows_exporter
 
         # Remove Prometheus Windows Exporter files and directory
         $exporterDirectory = "C:\temp\windows_exporter-0.23.1-amd64"  # Update with the actual directory
         Remove-Item -Path $exporterDirectory -Recurse -Force -ErrorAction SilentlyContinue
 
         # Remove Prometheus Windows Exporter registry entries (if any)
-        Remove-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services' -Name $serviceName -ErrorAction SilentlyContinue
+        Remove-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services' -Name 'windows_exporter' -ErrorAction SilentlyContinue
 
         # Remove Exporter-related files or artifacts as needed
 
