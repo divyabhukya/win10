@@ -1,0 +1,23 @@
+---
+- name: Install SQLite on Windows 10
+  hosts: 172.16.0.122  # Replace with the hostname or group of Windows 10 machines
+  gather_facts: no
+  tasks:
+    - name: Download SQLite
+      win_get_url:
+        url: https://www.sqlite.org/2022/sqlite-tools-win32-x86-3660000.zip  # Download link for SQLite
+        dest: C:\Temp\sqlite.zip
+      register: download_result
+
+    - name: Unzip SQLite
+      win_unzip:
+        src: C:\Temp\sqlite.zip
+        dest: C:\sqlite
+      when: download_result.changed
+
+    - name: Add SQLite to PATH
+      win_environment:
+        name: PATH
+        state: present
+        value: C:\sqlite
+      when: download_result.changed
