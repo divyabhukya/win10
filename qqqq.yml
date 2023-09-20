@@ -8,21 +8,14 @@
         url: https://github.com/prometheus-community/windows_exporter/releases/download/v0.23.1/windows_exporter-0.23.1-amd64.msi
         dest: C:\windows_exporter-0.23.1-amd64.msi
       register: download_result
-
     - name: Create Windows Exporter Service
-      win_service:
-        name: windows_exporter
-        state: present
-        service_type: auto
-        binary_path: "C:\windows_exporter-0.23.1-amd64.msi --collectors.enabled=default"
+      win_shell: >
+        New-Service -Name "windows_exporter" -BinaryPathName
+        "C:\windows_exporter-0.23.1-amd64.msi --collectors.enabled=default"
       when: download_result.changed
-
     - name: Start Windows Exporter Service
-      win_service:
-        name: windows_exporter
-        state: started
+      win_shell: Start-Service "windows_exporter"
       when: download_result.changed
-
     - name: Verify Windows Exporter Service is Running
       win_service:
         name: windows_exporter
