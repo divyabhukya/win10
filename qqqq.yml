@@ -1,6 +1,6 @@
 ---
 - name: Install Prometheus Windows Exporter
-  hosts: 10.10.5.182
+  hosts: 172.16.0.122
   gather_facts: no
   tasks:
     - name: Download Prometheus Windows Exporter
@@ -8,14 +8,17 @@
         url: https://github.com/prometheus-community/windows_exporter/releases/download/v0.23.1/windows_exporter-0.23.1-amd64.msi
         dest: C:\windows_exporter-0.23.1-amd64.msi
       register: download_result
-    - name: Create Windows Exporter Service
-      win_shell: >
-        New-Service -Name "windows_exporter" -BinaryPathName
-        "C:\windows_exporter-0.23.1-amd64.msi --collectors.enabled=default"
+
+    - name: Install Prometheus Windows Exporter
+      win_command: msiexec /i C:\windows_exporter-0.23.1-amd64.msi /qn
       when: download_result.changed
+
     - name: Start Windows Exporter Service
-      win_shell: Start-Service "windows_exporter"
+      win_service:
+        name: windows_exporter
+        state: started
       when: download_result.changed
+
     - name: Verify Windows Exporter Service is Running
       win_service:
         name: windows_exporter
