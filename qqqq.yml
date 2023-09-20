@@ -1,27 +1,22 @@
 ---
-- name: Uninstall Prometheus Windows Exporter
-  hosts: 172.16.0.122  # Replace with the hostname or IP of your Windows machine
+- name: Install Prometheus Windows Exporter
+  hosts: 172.16.0.122
   gather_facts: no
   tasks:
-    - name: Stop Windows Exporter Service (if running)
+    - name: Download Prometheus Windows Exporter
+      win_get_url:
+        url: https://github.com/prometheus-community/windows_exporter/releases/download/v0.23.1/windows_exporter-0.23.1-amd64.msi
+        dest: C:\windows_exporter-0.23.1-amd64.msi
+      register: download_result
+    - name: Create Windows Exporter Service
+      win_shell: >
+        New-Service -Name "windows_exporter" -BinaryPathName
+        "C:\windows_exporter-0.23.1-amd64.msi --collectors.enabled=default"
+      when: download_result.changed
+    - name: Start Windows Exporter Service
+      win_shell: Start-Service "windows_exporter"
+      when: download_result.changed
+    - name: Verify Windows Exporter Service is Running
       win_service:
         name: windows_exporter
-        state: stopped
-      ignore_errors: yes  # Ignore errors if the service is not running
-
-    - name: Uninstall Prometheus Windows Exporter
-      win_shell: |
-        # Uninstall the service (if it exists) using sc command
-        sc stop windows_exporter
-        sc delete windows_exporter
-
-        # Remove Prometheus Windows Exporter files and directory
-        $exporterDirectory = "C:\temp\windows_exporter-0.23.1-amd64"  # Update with the actual directory
-        Remove-Item -Path $exporterDirectory -Recurse -Force -ErrorAction SilentlyContinue
-
-        # Remove Prometheus Windows Exporter registry entries (if any)
-        Remove-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services' -Name 'windows_exporter' -ErrorAction SilentlyContinue
-
-        # Remove Exporter-related files or artifacts as needed
-
-      ignore_errors: yes  # Ignore errors if some resources do not exist
+        state: started
