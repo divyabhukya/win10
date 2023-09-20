@@ -1,0 +1,20 @@
+---
+- name: Uninstall Windows Exporter and Service
+  hosts: 10.10.5.181
+  gather_facts: no
+  tasks:
+    - name: Stop Windows Exporter Service
+      win_service:
+        name: windows_exporter
+        state: stopped
+      ignore_errors: yes  # Ignore errors if the service is not found or already stopped
+
+    - name: Uninstall Windows Exporter Service
+      win_shell: |
+        sc.exe delete windows_exporter
+      ignore_errors: yes  # Ignore errors if the service is not found or already deleted
+
+    - name: Remove Windows Exporter Files (if exists)
+      win_shell: |
+        if (Test-Path -Path 'C:\PrometheusExporter\windows_exporter') { Remove-Item -Path 'C:\PrometheusExporter\windows_exporter' -Recurse -Force }
+      ignore_errors: yes  # Ignore errors if the directory doesn't exist
