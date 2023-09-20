@@ -1,8 +1,8 @@
 ---
-- name: Remove windows_exporter service
+- name: Remove windows-exporter service
   hosts: 10.10.5.182  # Replace with the target host or group of hosts
   tasks:
-    - name: Ensure windows_exporter service is absent
+    - name: Ensure windows-exporter service is absent
       win_service:
-        name: windows_exporter
+        name: windows-exporter
         state: absent
