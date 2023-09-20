@@ -5,7 +5,7 @@
   tasks:
     - name: Download SQLite precompiled binaries
       win_get_url:
-        url: https://www.sqlite.org/download/sqlite-3.39.2-win64.zip
+        url: https://www.sqlite.org/2023/sqlite-3.39.2-win64.zip
         dest: C:\Temp\sqlite-3.39.2-win64.zip
       register: download_result
 
@@ -27,5 +27,3 @@
     - name: Report SQLite version
       debug:
         msg: "SQLite version: {{ sqlite_version.stdout }}"
-
-
