@@ -10,7 +10,7 @@
 
     - name: Download SQLite
       win_get_url:
-        url: https://www.sqlite.org/2022/sqlite-tools-win32-x86-3660000.zip  # Download link for SQLite
+        url: https://www.sqlite.org/2023/sqlite-tools-win32-x86-3660000.zip  # Update with the correct download URL
         dest: C:\Temp\sqlite.zip
       register: download_result
 
