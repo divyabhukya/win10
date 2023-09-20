@@ -1,22 +1,22 @@
 ---
 - name: Install Prometheus Windows Exporter
-  hosts: 10.10.5.184 # Replace with the hostname or IP of your Windows 10 machine
+  hosts: 172.16.0.122 # Replace with the hostname or IP of your Windows 10 machine
   gather_facts: no
   tasks:
     - name: Create Exporter Directory
       win_file:
-        path: C:\PrometheusExporter
+        path: C:\Temp
         state: directory
 
     - name: Download Prometheus Windows Exporter
       win_get_url:
         url: https://github.com/prometheus-community/windows_exporter/releases/download/v0.23.1/windows_exporter-0.23.1-amd64.msi
-        dest: C:\PrometheusExporter\windows_exporter-0.23.1-amd64.msi
+        dest: C:\Temp\windows_exporter-0.23.1-amd64.msi
       register: download_result
 
     - name: Create Windows Exporter Service
       win_shell: |
-        New-Service -Name "windows_exporter" -BinaryPathName "C:\PrometheusExporter\windows_exporter-0.23.1-amd64.msi --collectors.enabled=default"
+        New-Service -Name "windows_exporter" -BinaryPathName "C:\Temp\windows_exporter-0.23.1-amd64.msi --collectors.enabled=default"
       when: download_result.changed
 
     - name: Start Windows Exporter Service
