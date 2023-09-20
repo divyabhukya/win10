@@ -1,6 +1,6 @@
 ---
 - name: Uninstall Windows Exporter and Service
-  hosts: 10.10.5.183
+  hosts: 10.10.5.181
   gather_facts: no
   tasks:
     - name: Stop Windows Exporter Service
@@ -14,11 +14,11 @@
       ignore_errors: yes
     - name: Remove Windows Exporter Files
       win_shell: |
-        Remove-Item -Path 'C:\Prometheus\windows_exporter' -Recurse -Force
+        Remove-Item -Path 'C:\PrometheusExporter\windows_exporter' -Recurse -Force
       ignore_errors: yes
     - name: Remove Windows Exporter Service Directory
       win_shell: |
-        Remove-Item -Path 'C:\Prometheus\windows_exporter' -Recurse -Force
+        Remove-Item -Path 'C:\PrometheusExporter\windows_exporter' -Recurse -Force
       ignore_errors: yes
     - name: Reboot the Machine
       win_reboot: null
