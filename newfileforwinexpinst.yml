@@ -1,0 +1,21 @@
+---
+- name: Install Windows Exporter in Windows
+  hosts: 172.16.0.122
+  gather_facts: no
+  tasks:
+    - name: Download Windows Exporter
+      win_get_url:
+        url: https://github.com/prometheus-community/windows_exporter/releases/download/v0.23.1/windows_exporter-0.23.1-amd64.msi
+        dest: C:\Temp\windows_exporter-0.23.1/windows_exporter-0.23.1-amd64.msi
+    - name: Install Windows Exporter
+      win_package:
+        path: C:\Temp\windows_exporter-0.23.1/windows_exporter-0.23.1-amd64.msi
+        state: present
+    - name: Start Windows Exporter Service
+      win_service:
+        name: windows_exporter
+        state: started
+    - name: Enable Windows Exporter Service at startup
+      win_service:
+        name: windows_exporter
+        enabled: yes
