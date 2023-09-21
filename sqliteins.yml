@@ -1,6 +1,6 @@
 ---
 - name: Install SQLite in Windows 10
-  hosts: 10.10.5.181
+  hosts: 172.16.0.122
   gather_facts: no
   tasks:
     - name: Download SQLite precompiled binaries
