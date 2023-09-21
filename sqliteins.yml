@@ -8,16 +8,19 @@
         path: C:\Temp
         state: directory
     - name: Download SQLite precompiled binaries
-      win_shell: >
+      win_shell: |
         $webclient = New-Object System.Net.WebClient
-
-        $webclient.DownloadFile('https://www.sqlite.org/2023/sqlite-dll-win64-x64-3430100.zip')
+        $url = 'https://www.sqlite.org/2023/sqlite-dll-win64-x64-3430100.zip'
+        $destination = 'C:\Temp\sqlite-dll-win64-x64-3430100.zip'
+        $webclient.DownloadFile($url, $destination)
       args:
         executable: powershell.exe
     - name: Extract SQLite binaries
       win_unzip:
         src: C:\Temp\sqlite-dll-win64-x64-3430100.zip
         dest: C:\SQLite
+      when:"'C: \Temp\sqlite-dll-win64-x64-3430100.zip' | stat"
+      register: unzip_result
     - name: Add SQLite to PATH
       win_environment:
         name: PATH
