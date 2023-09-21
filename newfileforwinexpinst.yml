@@ -3,13 +3,18 @@
   hosts: 172.16.0.122
   gather_facts: no
   tasks:
+    - name: Create Temp Directory
+      win_file:
+        path: C:\Temp\windows_exporter
+        state: directory
     - name: Download Windows Exporter
       win_get_url:
-        url: https://github.com/prometheus-community/windows_exporter/releases/download/v0.23.1/windows_exporter-0.23.1-amd64.msi
-        dest: C:\Temp\windows_exporter-0.23.1/windows_exporter-0.23.1-amd64.msi
+        url: https://github.com/prometheus-community/windows_exporter/releases/download/v{{0.23.1}}/windows_exporter-{{
+          windows_exporter_version }}-amd64.msi
+        dest: C:\Temp\windows_exporter\windows_exporter-{{0.23.1}}-amd64.msi
     - name: Install Windows Exporter
       win_package:
-        path: C:\Temp\windows_exporter-0.23.1/windows_exporter-0.23.1-amd64.msi
+        path: C:\Temp\windows_exporter\windows_exporter-{{0.23.1}}-amd64.msi
         state: present
     - name: Start Windows Exporter Service
       win_service:
