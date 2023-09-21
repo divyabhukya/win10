@@ -4,13 +4,12 @@
   gather_facts: no
   tasks:
     - name: Download SQLite precompiled binaries
-      powershell:
-        script: >
+      win_command: >
           $webclient = New-Object System.Net.WebClient
 
           $webclient.DownloadFile('https://www.sqlite.org/2023/sqlite-3.39.2-win64.zip', 'C:\Temp\sqlite-3.39.2-win64.zip')
     - name: Extract SQLite binaries
-      unarchive:
+      win_unzip:
         src: C:\Temp\sqlite-3.39.2-win64.zip
         dest: C:\SQLite
     - name: Add SQLite to PATH
@@ -24,3 +23,4 @@
     - name: Report SQLite version
       debug:
         msg: "SQLite version: {{ sqlite_version.stdout }}"
+
