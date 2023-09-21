@@ -1,0 +1,20 @@
+---
+- name: Uninstall SQLite on Windows
+  hosts: 172.16.0.122  # Replace with the target host where SQLite is installed
+  gather_facts: no
+  tasks:
+    - name: Remove SQLite Files
+      win_file:
+        path: C:\SQLite
+        state: absent
+
+    - name: Remove SQLite Downloaded ZIP
+      win_file:
+        path: C:\Temp\sqlite-dll-win64-x64-3430100.zip
+        state: absent
+
+    - name: Remove SQLite from PATH
+      win_path:
+        elements:
+          - C:\SQLite
+        state: absent
