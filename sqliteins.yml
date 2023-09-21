@@ -11,7 +11,7 @@
       win_shell: >
         $webclient = New-Object System.Net.WebClient
 
-        $webclient.DownloadFile('https://www.sqlite.org/2023/sqlite-dll-win64-x64-3430100.zip', 'C:\Temp\sqlite-dll-win64-x64-3430100.zip')
+        $webclient.DownloadFile('https://www.sqlite.org/2023/sqlite-dll-win64-x64-3430100.zip')
       args:
         executable: powershell.exe
     - name: Extract SQLite binaries
