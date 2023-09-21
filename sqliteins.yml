@@ -17,12 +17,16 @@
       args:
         executable: powershell.exe
 
+    - name: Check if SQLite ZIP file exists
+      ansible.windows.win_stat:
+        path: 'C:\Temp\sqlite-dll-win64-x64-3430100.zip'
+      register: zip_file
+
     - name: Extract SQLite binaries
       win_unzip:
         src: C:\Temp\sqlite-dll-win64-x64-3430100.zip
         dest: C:\SQLite
-      when: "'C:\\Temp\\sqlite-dll-win64-x64-3430100.zip' | stat is succeeded"
-      register: unzip_result
+      when: zip_file.stat.exists
 
     - name: Add SQLite to PATH
       win_environment:
