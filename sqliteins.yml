@@ -1,28 +1,30 @@
 ---
-- name: Install SQLite on Windows 10
-  hosts: 10.10.5.181  # Replace with the hostname or group of Windows 10 machines
+- name: Install SQLite in Windows 10
+  hosts: 10.10.5.181
   gather_facts: no
   tasks:
-    - name: Create Temp Directory
-      win_file:
-        path: C:\Temp
-        state: directory
+    - name: Download SQLite precompiled binaries
+      uri:
+        url: https://www.sqlite.org/2023/sqlite-3.39.2-win64.zip
+        dest: C:\Temp\sqlite-3.39.2-win64.zip
+        force: yes
+        status_code: 200
 
-    - name: Download SQLite
-      win_get_url:
-        url: https://www.sqlite.org/new-url-for-sqlite.zip  # Update with the correct download URL
-        dest: C:\Temp\sqlite.zip
-      register: download_result
-
-    - name: Unzip SQLite
-      win_unzip:
-        src: C:\Temp\sqlite.zip
-        dest: C:\sqlite
-      when: download_result.changed
+    - name: Extract SQLite binaries
+      unarchive:
+        src: C:\Temp\sqlite-3.39.2-win64.zip
+        dest: C:\SQLite
 
     - name: Add SQLite to PATH
-      win_environment:
-        name: PATH
-        state: present
-        value: C:\sqlite
-      when: download_result.changed
+      win_path:
+        elements:
+          - C:\SQLite
+
+    - name: Verify SQLite is installed
+      win_command: sqlite3 --version
+      register: sqlite_version
+      check_mode: no
+
+    - name: Report SQLite version
+      debug:
+        msg: "SQLite version: {{ sqlite_version.stdout }}"
