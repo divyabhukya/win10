@@ -18,8 +18,14 @@
         src: C:\Temp\sqlite-dll-win64-x64-3430100.zip
         dest: C:\SQLite
 
-    - name: Add SQLite to PATH
-      win_path:
-        elements:
-          - C:\SQLite
-      when: "'C:\\SQLite' not in ansible_env.PATH"
+    - name: Add SQLite to PATH (PowerShell)
+      win_environment:
+        name: PATH
+        value: "C:\\SQLite;{{ ansible_env.PATH }}"
+      when: ansible_shell_type == 'powershell'
+
+    - name: Add SQLite to PATH (Command Prompt)
+      win_command: setx PATH "%PATH%;C:\SQLite" /M
+      args:
+        executable: cmd.exe
+      when: ansible_shell_type == 'cmd'
