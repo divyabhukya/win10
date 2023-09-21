@@ -1,18 +1,24 @@
 ---
 - name: Install SQLite in Windows
-  hosts: 172.16.0.122
+  hosts: your_target_host
   gather_facts: no
   tasks:
+    - name: Ensure the required collection is installed
+      ansible.builtin.collection:
+        name: ansible.community.wind
+      when: not ansible_facts.collections.get('ansible.community.wind')
+
     - name: Create Temp Directory
       win_file:
         path: C:\Temp
         state: directory
 
     - name: Download SQLite precompiled binaries
-      powershell:
-        script: >
-          $webclient = New-Object System.Net.WebClient
-          $webclient.DownloadFile('https://www.sqlite.org/2023/sqlite-dll-win64-x64-3430100.zip', 'C:\Temp\sqlite-dll-win64-x64-3430100.zip')
+      win_shell: >
+        $webclient = New-Object System.Net.WebClient
+        $webclient.DownloadFile('https://www.sqlite.org/2023/sqlite-dll-win64-x64-3430100.zip', 'C:\Temp\sqlite-dll-win64-x64-3430100.zip')
+      args:
+        executable: powershell.exe
 
     - name: Extract SQLite binaries
       win_unzip:
