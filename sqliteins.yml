@@ -7,6 +7,7 @@
       win_file:
         path: C:\Temp
         state: directory
+
     - name: Download SQLite precompiled binaries
       win_shell: |
         $webclient = New-Object System.Net.WebClient
@@ -15,21 +16,26 @@
         $webclient.DownloadFile($url, $destination)
       args:
         executable: powershell.exe
+
     - name: Extract SQLite binaries
       win_unzip:
         src: C:\Temp\sqlite-dll-win64-x64-3430100.zip
         dest: C:\SQLite
-      when:"'C: \Temp\sqlite-dll-win64-x64-3430100.zip' | stat"
+      when: "'C:\\Temp\\sqlite-dll-win64-x64-3430100.zip' | stat is succeeded"
       register: unzip_result
+
     - name: Add SQLite to PATH
       win_environment:
         name: PATH
         state: present
         value: C:\SQLite
+
     - name: Verify SQLite is installed
       win_command: sqlite3 --version
       register: sqlite_version
       check_mode: no
+
     - name: Report SQLite version
       debug:
         msg: "SQLite version: {{ sqlite_version.stdout }}"
+
