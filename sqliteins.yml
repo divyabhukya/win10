@@ -24,7 +24,7 @@
       win_environment:
         name: PATH
         state: present
-        value: C:\SQLite
+        value: C:\SQLite\
     - name: Verify SQLite is installed
       win_command: sqlite3 --version
       register: sqlite_version
