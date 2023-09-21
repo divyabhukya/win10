@@ -22,4 +22,4 @@
       win_path:
         elements:
           - C:\SQLite
-        state: prepend
+        state: present
