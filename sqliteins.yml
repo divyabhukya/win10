@@ -4,11 +4,10 @@
   gather_facts: no
   tasks:
     - name: Download SQLite precompiled binaries
-      uri:
-        url: https://www.sqlite.org/2023/sqlite-3.39.2-win64.zip
-        dest: C:\Temp\sqlite-3.39.2-win64.zip
-        force: yes
-        status_code: 200
+      powershell:
+        script: |
+          $webclient = New-Object System.Net.WebClient
+          $webclient.DownloadFile('https://www.sqlite.org/2023/sqlite-3.39.2-win64.zip', 'C:\Temp\sqlite-3.39.2-win64.zip')
 
     - name: Extract SQLite binaries
       unarchive:
