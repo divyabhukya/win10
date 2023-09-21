@@ -1,36 +1,32 @@
 ---
 - name: Install SQLite in Windows
-  hosts: 172.16.0.122  # Replace with the IP or hostname of your Windows machine
+  hosts: 172.16.0.122
   gather_facts: no
   tasks:
     - name: Create Temp Directory
       win_file:
         path: C:\Temp
         state: directory
-
     - name: Download SQLite precompiled binaries
-      win_shell: |
+      win_shell: >
         $webclient = New-Object System.Net.WebClient
-        $webclient.DownloadFile('<Correct-Download-URL>', 'C:\Temp\sqlite-3.39.2-win64.zip')
+
+        $webclient.DownloadFile('https://www.sqlite.org/2023/sqlite-dll-win64-x64-3430100.zip', 'C:\Temp\sqlite-3.x.x-win64.zip')
       args:
         executable: powershell.exe
-
     - name: Extract SQLite binaries
       win_unzip:
-        src: C:\Temp\sqlite-3.39.2-win64.zip
+        src: C:\Temp\sqlite-dll-win64-x64-3430100.zip
         dest: C:\SQLite
-
     - name: Add SQLite to PATH
       win_environment:
         name: PATH
         state: present
         value: C:\SQLite
-
     - name: Verify SQLite is installed
       win_command: sqlite3 --version
       register: sqlite_version
       check_mode: no
-
     - name: Report SQLite version
       debug:
         msg: "SQLite version: {{ sqlite_version.stdout }}"
