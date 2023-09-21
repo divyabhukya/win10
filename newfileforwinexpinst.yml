@@ -30,9 +30,9 @@
       win_service:
         name: windows_exporter
         state: started
-      when: "'Service not installed' not in service_status.msg"
+      when: "'Service not installed' in service_status.stderr"
     - name: Enable Windows Exporter Service at startup
       win_service:
         name: windows_exporter
         enabled: yes
-      when: "'Service not installed' not in service_status.msg"
+      when: "'Service not installed' in service_status.stderr"
