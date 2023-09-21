@@ -32,3 +32,4 @@
     - name: Report SQLite version
       debug:
         msg: "SQLite version: {{ sqlite_version.stdout }}"
+
