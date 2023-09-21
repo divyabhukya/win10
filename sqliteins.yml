@@ -26,7 +26,7 @@
     #     state: present
     #     value: C:\SQLite\
     - name: Verify SQLite is installed
-      win_command: sqlite3 --version
+      win_command: C:\SQLite\sqlite3 --version
       register: sqlite_version
       check_mode: no
     - name: Report SQLite version
