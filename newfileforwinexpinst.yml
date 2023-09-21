@@ -21,12 +21,18 @@
         path: C:\Temp\windows_exporter\windows_exporter-{{ windows_exporter_version
           }}-amd64.msi
         state: present
+    - name: Check if Windows Exporter Service Exists
+      win_service:
+        name: windows_exporter
+      register: service_status
+      ignore_errors: yes
     - name: Start Windows Exporter Service
       win_service:
         name: windows_exporter
         state: started
+      when: "'Service not installed' not in service_status.msg"
     - name: Enable Windows Exporter Service at startup
       win_service:
         name: windows_exporter
         enabled: yes
-
+      when: "'Service not installed' not in service_status.msg"
