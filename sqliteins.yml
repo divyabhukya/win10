@@ -19,8 +19,7 @@
         dest: C:\SQLite
 
     - name: Add SQLite to PATH
-  win_environment:
-    name: PATH
-    value: "C:\\SQLite;{{ ansible_env.PATH }}"
-  register: path_result
-  ignore_errors: yes
+      win_path:
+        elements:
+          - C:\SQLite
+      when: "'C:\\SQLite' not in ansible_env.PATH"
