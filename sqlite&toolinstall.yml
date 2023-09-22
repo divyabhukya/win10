@@ -2,6 +2,8 @@
 - name: Install Windows Exporter in Windows
   hosts: 172.16.0.122
   gather_facts: no
+  become: yes
+  become_method: winrm
   tasks:
     - name: Create Temp Directory
       win_file:
@@ -15,25 +17,8 @@
       win_command: msiexec.exe /i
         C:\Temp\windows_exporter\windows_exporter-0.23.1-amd64.msi /quiet
         /norestart
-      register: install_result
-      async: 300
-      poll: 0
-      become: yes
-    - name: Wait for Installation to Complete
-      async_status:
-        jid: "{{ install_result.ansible_job_id }}"
-      register: job_result
-      until: job_result.finished
-      retries: 300
-      delay: 10
     - name: Start Windows Exporter Service
       win_service:
         name: windows_exporter
         state: started
         start_mode: auto
-      when: "'Service not installed' not in install_result.stdout"
-    - name: Enable Windows Exporter Service at startup
-      win_service:
-        name: windows_exporter
-        enabled: yes
-      when: "'Service not installed' not in install_result.stdout"
