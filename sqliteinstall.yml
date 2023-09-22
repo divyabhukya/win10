@@ -1,6 +1,6 @@
 ---
 - name: Install SQLite on Windows
-  hosts: 10.10.5.184
+  hosts: 172.16.0.122
   gather_facts: no
   tasks:
     - name: Create Temp Directory
