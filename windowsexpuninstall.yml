@@ -1,0 +1,25 @@
+---
+- name: Uninstall Windows Exporter in Windows
+  hosts: 172.16.0.122
+  gather_facts: no
+  tasks:
+    - name: Stop Windows Exporter Service
+      win_shell: |
+        Stop-Service -Name windows_exporter
+      args:
+        executable: powershell.exe
+      ignore_errors: yes
+    - name: Uninstall Windows Exporter
+      win_shell: >
+        Start-Process msiexec.exe -ArgumentList '/x
+        C:\Temp\windows_exporter\windows_exporter-0.23.1-amd64.msi /quiet
+        /norestart' -Wait
+      args:
+        executable: powershell.exe
+      ignore_errors: yes
+    - name: Remove Windows Exporter Directory
+      win_shell: |
+        Remove-Item -Path C:\Temp\windows_exporter -Recurse -Force
+      args:
+        executable: powershell.exe
+      ignore_errors: yes
