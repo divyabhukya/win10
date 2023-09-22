@@ -2,23 +2,32 @@
 - name: Install Windows Exporter in Windows
   hosts: 172.16.0.122
   gather_facts: no
-  become: yes
-  become_method: winrm
   tasks:
     - name: Create Temp Directory
-      win_file:
-        path: C:\Temp\windows_exporter
-        state: directory
+      win_shell: |
+        mkdir C:\Temp\windows_exporter
+      ignore_errors: yes
     - name: Download Windows Exporter
-      win_get_url:
-        url: https://github.com/prometheus-community/windows_exporter/releases/download/v0.23.1/windows_exporter-0.23.1-amd64.msi
-        dest: C:\Temp\windows_exporter\windows_exporter-0.23.1-amd64.msi
+      win_shell: >
+        Invoke-WebRequest -Uri
+        https://github.com/prometheus-community/windows_exporter/releases/download/v0.23.1/windows_exporter-0.23.1-amd64.msi
+        -OutFile C:\Temp\windows_exporter\windows_exporter-0.23.1-amd64.msi
+      args:
+        executable: powershell.exe
     - name: Install Windows Exporter
-      win_command: msiexec.exe /i
+      win_shell: >
+        Start-Process msiexec.exe -ArgumentList '/i
         C:\Temp\windows_exporter\windows_exporter-0.23.1-amd64.msi /quiet
-        /norestart
+        /norestart' -Wait
+      args:
+        executable: powershell.exe
     - name: Start Windows Exporter Service
-      win_service:
-        name: windows_exporter
-        state: started
-        start_mode: auto
+      win_shell: |
+        Start-Service -Name windows_exporter
+      args:
+        executable: powershell.exe
+    - name: Set Windows Exporter Service to Automatic Startup
+      win_shell: |
+        Set-Service -Name windows_exporter -StartupType 'Automatic'
+      args:
+        executable: powershell.exe
