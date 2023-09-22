@@ -1,9 +1,0 @@
----
-- name: Start Windows Exporter Service
-  hosts: 10.10.5.181  # Replace with the hostname or IP of your Windows machine
-  gather_facts: no
-  tasks:
-    - name: Start Windows Exporter Service
-      win_service:
-        name: windows_exporter
-        state: started
