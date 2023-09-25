@@ -1,28 +1,21 @@
 ---
 - name: Install SQLite on Ubuntu
   hosts:
-    - 172.16.0.236
     - 172.16.0.113
-  become: yes  # This allows the tasks to run with sudo privileges
+    - 172.16.0.236
+  gather_facts: no
+  become: yes
+  become_method: sudo
+  become_user: root
   tasks:
     - name: Update apt cache
-      apt:
+      ansible.builtin.apt:
         update_cache: yes
-      tags: update
+      ansible_python_interpreter: /usr/bin/python3
 
     - name: Install SQLite
-      apt:
-        name: sqlite3  # Package name for SQLite
+      ansible.builtin.apt:
+        name: sqlite3
         state: present
-      tags: install
-
-    - name: Verify SQLite installation
-      command: sqlite3 --version
-      register: sqlite_version
-      tags: verify
-
-    - name: Display SQLite version
-      debug:
-        var: sqlite_version.stdout
-      tags: verify
+      ansible_python_interpreter: /usr/bin/python3
 
