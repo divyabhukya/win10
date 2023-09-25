@@ -1,22 +1,28 @@
 ---
-- name: Install SQLite on Windows
-  hosts: all
-  gather_facts: no
+- name: Install SQLite on Ubuntu
+  hosts:
+    - 172.16.0.236
+    - 172.16.0.113
+  become: yes  # This allows the tasks to run with sudo privileges
   tasks:
-    - name: Create Temp Directory
-      win_file:
-        path: C:\Temp
-        state: directory
-    - name: Download SQLite precompiled binaries
-      win_get_url:
-        url: https://www.sqlite.org/2023/sqlite-dll-win64-x64-3430100.zip
-        dest: C:\Temp\sqlite-dll-win64-x64-3430100.zip
-    - name: Extract SQLite binaries
-      win_unzip:
-        src: C:\Temp\sqlite-dll-win64-x64-3430100.zip
-        dest: C:\SQLite
-    - name: Add SQLite to PATH
-      win_path:
-        elements:
-          - C:\SQLite
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+      tags: update
+
+    - name: Install SQLite
+      apt:
+        name: sqlite3  # Package name for SQLite
         state: present
+      tags: install
+
+    - name: Verify SQLite installation
+      command: sqlite3 --version
+      register: sqlite_version
+      tags: verify
+
+    - name: Display SQLite version
+      debug:
+        var: sqlite_version.stdout
+      tags: verify
+
