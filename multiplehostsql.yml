@@ -7,10 +7,8 @@
   become: yes
   tasks:
     - name: Update apt cache
-      ansible.builtin.apt:
-        update_cache: yes
+      ansible.builtin.command: apt-get update
+      changed_when: false
 
     - name: Install SQLite
-      ansible.builtin.apt:
-        name: sqlite3
-        state: present
+      ansible.builtin.command: apt-get install -y sqlite3
