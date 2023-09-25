@@ -5,10 +5,15 @@
     - 172.16.0.236
   gather_facts: no
   become: yes
+  become_method: sudo
   tasks:
     - name: Update apt cache
-      ansible.builtin.command: apt-get update
+      ansible.builtin.apt:
+        update_cache: yes
       changed_when: false
-
     - name: Install SQLite
-      ansible.builtin.command: apt-get install -y sqlite3
+      ansible.builtin.apt:
+        name: sqlite3
+        state: present
+
+
