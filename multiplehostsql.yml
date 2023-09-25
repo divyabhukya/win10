@@ -4,9 +4,6 @@
     - 172.16.0.122
     - 172.16.0.176
   gather_facts: no
-  vars:
-    ansible_winrm_operation_timeout_sec: 60
-    ansible_winrm_read_timeout_sec: 70
   tasks:
     - name: Create Temp Directory
       win_file:
@@ -16,8 +13,6 @@
       win_get_url:
         url: https://www.sqlite.org/2023/sqlite-dll-win64-x64-3430100.zip
         dest: C:\Temp\sqlite-dll-win64-x64-3430100.zip
-      args:
-        executable: powershell.exe
     - name: Extract SQLite binaries
       win_unzip:
         src: C:\Temp\sqlite-dll-win64-x64-3430100.zip
