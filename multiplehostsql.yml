@@ -1,26 +1,12 @@
 ---
-- hosts: all
-  become: yes
-  become_user: administrator
-  vars:
-    windows_exporter_version: 0.17.0
-    windows_exporter_download_url: https://github.com/prometheus/windows_exporter/releases/download/v0.17.0/windows_exporter-0.17.0-win64.exe
+- name: Create Directory in Ubuntu
+  hosts:
+    - 172.16.0.113  # Replace with the first host's name or IP address
+    - 172.16.0.236 # Replace with the second host's name or IP address
+  become: yes  # Use sudo to execute commands as root
   tasks:
-    - name: Download Windows Exporter
-      win_get_url:
-        url: "{{ windows_exporter_download_url }}"
-        dest: C:\Downloads
-    - name: Install Windows Exporter
-      win_chocolatey:
-        name: windows-exporter
-        version: "{{ windows_exporter_version }}"
-    - name: Create Windows Exporter service
-      win_service:
-        name: windows_exporter
-        state: started
-        enabled: yes
-    - name: Start Windows Exporter service
-      win_service:
-        name: windows_exporter
-        state: started
-
+    - name: Create Directory
+      file:
+        path: /home/divya/testdir  # Replace with the desired directory path
+        state: directory
+      become_user: root  # Specify the user for which you want to create the directory
