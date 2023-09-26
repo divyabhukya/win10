@@ -1,23 +1,26 @@
 ---
 - hosts: all
   become: yes
+  vars:
+    windows_exporter_version: 0.17.0
+    windows_exporter_download_url: https://github.com/prometheus/windows_exporter/releases/download/v0.17.0/windows_exporter-0.17.0-win64.exe
   tasks:
-  - name: Update the system repositories
-    apt:
-      update_cache: yes
-
-  - name: Install SQLite 3
-    apt:
-      name: sqlite3
-      state: present
-
-  - name: Check the SQLite installation
-    command: sqlite3 --version
-    register: sqlite_version
-
-  - name: Assert that SQLite is installed
-    assert:
-      that:
-        - sqlite_version.rc == 0
+    - name: Download Windows Exporter
+      win_get_url:
+        url: "{{ windows_exporter_download_url }}"
+        dest: C:\Downloads
+    - name: Install Windows Exporter
+      win_chocolatey:
+        name: windows-exporter
+        version: "{{ windows_exporter_version }}"
+    - name: Create Windows Exporter service
+      win_service:
+        name: windows_exporter
+        state: started
+        enabled: yes
+    - name: Start Windows Exporter service
+      win_service:
+        name: windows_exporter
+        state: started
 
 
