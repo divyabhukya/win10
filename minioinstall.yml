@@ -1,0 +1,38 @@
+---
+- name: Install MinIO on Windows
+  hosts: 172.16.0.122
+  gather_facts: no
+  tasks:
+    - name: Create MinIO installation directory
+      win_file:
+        path: C:\MinIO
+        state: directory
+    - name: Download MinIO binary
+      win_get_url:
+        url: https://dl.min.io/server/minio/release/windows-amd64/minio.exe
+        dest: C:\MinIO\minio.exe
+      args:
+        force: yes
+    - name: Create MinIO service
+      win_shell: |
+        New-Service -Name MinIO `
+          -BinaryPathName "C:\MinIO\minio.exe server C:\MinIO\Data" `
+          -Description "MinIO Object Storage" `
+          -DisplayName "MinIO" `
+          -StartupType Automatic
+      args:
+        executable: powershell.exe
+    - name: Start MinIO service
+      win_shell: |
+        Start-Service MinIO
+      args:
+        executable: powershell.exe
+    - name: Check MinIO service status
+      win_shell: |
+        Get-Service MinIO | Select-Object -ExpandProperty Status
+      args:
+        executable: powershell.exe
+      register: minio_service_status
+    - name: Print MinIO service status
+      debug:
+        msg: "MinIO service status: {{ minio_service_status.stdout }}"
