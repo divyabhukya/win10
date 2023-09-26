@@ -1,0 +1,6 @@
+- name: Test WinRM Connection
+  hosts: 172.16.0.176
+  gather_facts: no
+  tasks:
+    - name: Test WinRM
+      win_ping:
