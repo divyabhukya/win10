@@ -1,6 +1,7 @@
 ---
 - hosts: all
   become: yes
+  become_user: administrator
   vars:
     windows_exporter_version: 0.17.0
     windows_exporter_download_url: https://github.com/prometheus/windows_exporter/releases/download/v0.17.0/windows_exporter-0.17.0-win64.exe
@@ -22,5 +23,4 @@
       win_service:
         name: windows_exporter
         state: started
-
 
