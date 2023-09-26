@@ -13,13 +13,10 @@
         dest: C:\MinIO\minio.exe
       args:
         force: yes
-    - name: Create MinIO service
-      win_shell: |
-        New-Service -Name MinIO `
-          -BinaryPathName "C:\MinIO\minio.exe server C:\MinIO\Data" `
-          -Description "MinIO Object Storage" `
-          -DisplayName "MinIO" `
-          -StartupType Automatic
+    - name: Set MinIO service configuration
+      win_shell: >
+        sc.exe create MinIO binPath= "\"C:\MinIO\minio.exe\" server
+        C:\MinIO\Data" start= auto DisplayName= "MinIO"
       args:
         executable: powershell.exe
     - name: Start MinIO service
