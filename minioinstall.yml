@@ -2,19 +2,13 @@
 - name: Install MinIO Client on Windows
   hosts: 172.16.0.122
   tasks:
-    - name: Install Chocolatey
-      win_chocolatey:
-        name: chocolatey
-        state: present
-
-    - name: Install MinIO Client
-      win_chocolatey:
-        name: minio-client
-        state: present
+    - name: Download MinIO Client
+      win_get_url:
+        url: https://dl.min.io/client/mc/release/windows-amd64/mc.exe
+        dest: C:\Program Files\MinIO Client\mc.exe
 
     - name: Add MinIO Client to PATH
       win_environment:
         name: PATH
         value: "{{ ansible_env.PATH }};C:\\Program Files\\MinIO Client"
         state: present
-
