@@ -13,7 +13,5 @@
         dest: "C:\\Program Files\\MinIO Client\\mc.exe"
 
     - name: Add MinIO Client to PATH
-      win_environment:
-        name: PATH
-        value: "C:\\Program Files\\MinIO Client"
-        state: present
+      win_shell: |
+        [Environment]::SetEnvironmentVariable("PATH", $env:PATH + ";C:\Program Files\MinIO Client", [System.EnvironmentVariableTarget]::Machine)
