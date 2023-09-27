@@ -1,21 +1,55 @@
 ---
-- hosts: 172.16.0.122
+- name: Install Minio Client on Windows
+  hosts: 172.16.0.122
   become: yes
   become_method: runas
   become_user: administrator
-
   tasks:
-    - name: Download Minio client
+    - name: Download Minio Client Installer
       win_get_url:
-        url: https://dl.min.io/client/minio-latest-windows-amd64.exe
-        dest: C:\Downloads
+        url: https://dl.min.io/client/mc/release/windows-amd64/mc.exe
+        dest: C:\Downloads\mc.exe
+      register: download_result
 
-    - name: Install Minio client
-      win_chocolatey:
-        name: minio
-        version: latest
+    - name: Verify Download
+      fail:
+        msg: "Download of Minio Client failed."
+      when: not download_result.changed
 
-    - name: Add Minio client to PATH
+    - name: Install Minio Client
+      win_command: C:\Downloads\mc.exe --quiet --autoupdate update
+      environment:
+        PATH: "{{ ansible_env.PATH }};C:\Program Files\Minio Client"
+      args:
+        executable: powershell.exe
+      async: 600
+      poll: 0
+      register: install_result
+      ignore_errors: yes
+
+    - name: Wait for Minio Client Installation to Complete
+      async_status:
+        jid: "{{ install_result.ansible_job_id }}"
+      register: job_result
+      until: job_result.finished
+      retries: 60
+      delay: 10
+
+    - name: Check Minio Client Installation Result
+      debug:
+        var: job_result
+
+    - name: Add Minio Client to PATH
       win_path:
-        path: C:\Program Files\Minio Client
+        elements:
+          - C:\Program Files\Minio Client
         state: present
+
+    - name: Verify Minio Client Installation
+      command: mc --version
+      register: mc_version
+      ignore_errors: yes
+
+    - name: Display Minio Client Version
+      debug:
+        var: mc_version.stdout_lines
