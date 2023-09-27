@@ -1,15 +1,20 @@
 ---
 - hosts: 172.16.0.122
   become: yes
+  become_method: runas
+  become_user: administrator
+
   tasks:
     - name: Download Minio client
       win_get_url:
         url: https://dl.min.io/client/minio-latest-windows-amd64.exe
         dest: C:\Downloads
+
     - name: Install Minio client
       win_chocolatey:
         name: minio
         version: latest
+
     - name: Add Minio client to PATH
       win_path:
         path: C:\Program Files\Minio Client
