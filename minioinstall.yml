@@ -1,23 +1,17 @@
 ---
 - name: Install MinIO Client on Windows
-  hosts: 172.16.0.122  # Replace with the hostname or group name of your Windows machine
+  hosts: 172.16.0.122
   gather_facts: no
   tasks:
     - name: Download MinIO Client
-      win_command: >
-        Invoke-WebRequest -Uri https://dl.min.io/client/mc/release/windows-amd64/mc.exe -OutFile C:\path\to\mc.exe
+      win_command: |
+        Invoke-WebRequest -Uri https://dl.min.io/client/mc/release/windows-amd64/mc.exe -OutFile C:\mc.exe
       args:
         executable: powershell.exe
-      delegate_to: localhost
 
-    - name: Move MinIO Client Executable
-      win_command: mv C:\path\to\mc.exe C:\Windows\System32\mc.exe
+    - name: Move MinIO Client to System32
+      win_command: |
+        Move-Item -Path C:\mc.exe -Destination C:\Windows\System32 -Force
       args:
         executable: powershell.exe
-      delegate_to: localhost
 
-    - name: Verify MinIO Client Installation
-      win_command: mc --version
-      args:
-        executable: cmd.exe
-      delegate_to: localhost
