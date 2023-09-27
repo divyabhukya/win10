@@ -1,35 +1,30 @@
 ---
-- name: Install MinIO on Windows
+- name: Install MinIO Client on Windows
   hosts: 172.16.0.122
   gather_facts: no
   tasks:
-    - name: Create MinIO installation directory
-      win_file:
-        path: C:\MinIO
-        state: directory
-    - name: Download MinIO binary
-      win_get_url:
-        url: https://dl.min.io/server/minio/release/windows-amd64/minio.exe
-        dest: C:\MinIO\minio.exe
-      args:
-        force: yes
-    - name: Set MinIO service configuration
-      win_shell: >
-        sc.exe create MinIO binPath= "\"C:\MinIO\minio.exe\" server
-        C:\MinIO\Data" start= auto DisplayName= "MinIO"
-      args:
-        executable: powershell.exe
-    - name: Start MinIO service
+    - name: Download MinIO Client
       win_shell: |
-        Start-Service MinIO
+        Invoke-WebRequest -Uri https://dl.min.io/client/mc/release/windows-amd64/mc.exe -OutFile C:\mc.exe
       args:
         executable: powershell.exe
-    - name: Check MinIO service status
-      win_shell: |
-        Get-Service MinIO | Select-Object -ExpandProperty Status
+      become: yes
+
+    - name: Copy MinIO Client to C:\Windows\System32
+      win_copy:
+        src: C:\mc.exe
+        dest: C:\Windows\System32\mc.exe
+      become: yes
+
+    - name: Add C:\Windows\System32 to PATH
+      win_environment:
+        name: PATH
+        state: present
+        value: C:\Windows\System32
+      become: yes
+
+    - name: Verify MinIO Client Installation
+      win_shell: mc --version
       args:
         executable: powershell.exe
-      register: minio_service_status
-    - name: Print MinIO service status
-      debug:
-        msg: "MinIO service status: {{ minio_service_status.stdout }}"
+      become: yes
