@@ -1,6 +1,6 @@
 ---
 - name: Uninstall Windows Exporter in Windows
-  hosts: 172.16.0.122
+  hosts: 192.168.10.9
   gather_facts: no
   tasks:
     - name: Stop Windows Exporter Service
