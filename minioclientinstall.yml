@@ -1,17 +1,17 @@
 ---
-- name: Install MinIO Client on Windows
-  hosts: 172.16.0.122
+- name: Install MinIO Client in Temp Folder on Windows
+  hosts: 192.168.10.9
   tasks:
-    - name: Create MinIO Client directory
+    - name: Create Temp directory if it doesn't exist
       win_file:
-        path: "C:\\Program Files\\MinIO Client"
+        path: "C:\\Temp"
         state: directory
 
     - name: Download MinIO Client
       win_get_url:
         url: https://dl.min.io/client/mc/release/windows-amd64/mc.exe
-        dest: "C:\\Program Files\\MinIO Client\\mc.exe"
+        dest: "C:\\Temp\\mc.exe"
 
     - name: Add MinIO Client to PATH
       win_shell: |
-        [Environment]::SetEnvironmentVariable("PATH", $env:PATH + ";C:\Program Files\MinIO Client", [System.EnvironmentVariableTarget]::Machine)
+        [Environment]::SetEnvironmentVariable("PATH", $env:PATH + ";C:\Temp", [System.EnvironmentVariableTarget]::Machine)
