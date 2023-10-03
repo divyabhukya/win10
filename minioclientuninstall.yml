@@ -4,11 +4,8 @@
   become: yes
   tasks:
     - name: Remove MinIO Client executable
-      win_file:
-        path: "C:\\Temp\\mc.exe"
-        state: absent
+      win_shell: Remove-Item -Path "C:\Temp\mc.exe" -Force
 
     - name: Remove Temp directory if empty
-      win_file:
-        path: "C:\\Temp"
-        state: absent
+      win_shell: Remove-Item -Path "C:\Temp" -Force
+
