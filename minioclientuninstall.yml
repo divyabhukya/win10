@@ -1,0 +1,13 @@
+---
+- name: Uninstall MinIO Client from Temp Folder on Windows
+  hosts: 192.168.10.9
+  tasks:
+    - name: Remove MinIO Client executable
+      win_file:
+        path: "C:\\Temp\\mc.exe"
+        state: absent
+
+    - name: Remove Temp directory if empty
+      win_file:
+        path: "C:\\Temp"
+        state: absent
