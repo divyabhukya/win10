@@ -1,6 +1,7 @@
 ---
 - name: Uninstall MinIO Client from Temp Folder on Windows
   hosts: 192.168.10.9
+  become: yes
   tasks:
     - name: Remove MinIO Client executable
       win_file:
