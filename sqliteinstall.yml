@@ -1,6 +1,6 @@
 ---
 - name: Install SQLite on Windows
-  hosts: 172.16.0.201
+  hosts: 10.10.5.181
   gather_facts: no
   tasks:
     - name: Create Temp Directory
@@ -9,8 +9,8 @@
         state: directory
 
     - name: Download SQLite precompiled binaries
-      win_get_url:
-        url: https://www.sqlite.org/2023/sqlite-dll-win64-x64-3430100.zip
+      win_get_url: https://www.sqlite.org/2023/sqlite-dll-win64-x64-3430200.zip
+        url: 
         dest: C:\Temp\sqlite-dll-win64-x64-3430100.zip
 
     - name: Extract SQLite binaries
