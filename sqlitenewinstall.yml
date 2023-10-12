@@ -5,21 +5,21 @@
   tasks:
     - name: Create Program Files Directory
       win_file:
-        path: "C:\Program Files\SQLite"
+        path: "C:\\Program Files\\SQLite"  # Use double backslashes to escape the path
         state: directory
 
     - name: Download SQLite precompiled binaries
       win_get_url:
         url: https://www.sqlite.org/2023/sqlite-dll-win64-x64-3430100.zip
-        dest: "C:\Program Files\SQLite\sqlite-dll-win64-x64-3430100.zip"
+        dest: "C:\\Program Files\\SQLite\\sqlite-dll-win64-x64-3430100.zip"
 
     - name: Extract SQLite binaries
       win_unzip:
-        src: "C:\Program Files\SQLite\sqlite-dll-win64-x64-3430100.zip"
-        dest: "C:\Program Files\SQLite"
+        src: "C:\\Program Files\\SQLite\\sqlite-dll-win64-x64-3430100.zip"
+        dest: "C:\\Program Files\\SQLite"
 
     - name: Add SQLite to PATH
       win_path:
         elements:
-          - "C:\Program Files\SQLite"
+          - "C:\\Program Files\\SQLite"  # Use double backslashes to escape the path
         state: present
