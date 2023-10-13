@@ -9,7 +9,7 @@
         state: directory
     - name: Download SQLite Tools
       win_get_url:
-        url: https://example.com/sqlite-tools-win32-x86-3430200.zip
+        url: https://www.sqlite.org/sqlite-tools-win32-x86-3430200.zip
         dest: C:\Temp\sqlite.zip
       register: download_result
     - name: Extract SQLite Tools
