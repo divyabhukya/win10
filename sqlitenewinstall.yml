@@ -3,23 +3,23 @@
   hosts: 172.16.0.201
   gather_facts: no
   tasks:
-    - name: Create Program Files Directory
+    - name: Create Temp Directory
       win_file:
-        path: "C:\\Program Files\\SQLite"  # Use double backslashes to escape the path
+        path: C:\Temp
         state: directory
 
     - name: Download SQLite precompiled binaries
       win_get_url:
-        url: https://www.sqlite.org/2023/sqlite-dll-win64-x64-3430100.zip
-        dest: "C:\\Program Files\\SQLite\\sqlite-dll-win64-x64-3430100.zip"
+        url: https://www.sqlite.org/2023/sqlite-dll-win64-x64-3430200.zip
+        dest: C:\Temp\sqlite-dll-win64-x64-3430200.zip
 
     - name: Extract SQLite binaries
       win_unzip:
-        src: "C:\\Program Files\\SQLite\\sqlite-dll-win64-x64-3430100.zip"
-        dest: "C:\\Program Files\\SQLite"
+        src: C:\Temp\sqlite-dll-win64-x64-3430200.zip
+        dest: C:\SQLite
 
     - name: Add SQLite to PATH
       win_path:
         elements:
-          - "C:\\Program Files\\SQLite"  # Use double backslashes to escape the path
+          - C:\SQLite
         state: present
