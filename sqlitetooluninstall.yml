@@ -1,0 +1,14 @@
+---
+- name: Uninstall SQLite from C:\SQLite on Windows
+  hosts: 10.10.5.181
+  gather_facts: no
+  tasks:
+    - name: Remove SQLite Directory
+      win_file:
+        path: C:\SQLite
+        state: absent
+
+    - name: Remove Downloaded SQLite ZIP
+      win_file:
+        path: C:\SQLite\sqlite-tools-win32-x86-3430100.zip
+        state: absent
