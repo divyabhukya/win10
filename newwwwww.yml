@@ -1,23 +1,25 @@
 ---
-- name: Install SQLite and Set Environment Variable in Windows
+- name: Install SQLite in C:\SQLite on Windows
   hosts: 172.16.0.201
-  gather_facts: yes
+  gather_facts: no
   tasks:
-    - name: Create Temp Directory
+    - name: Create C:\SQLite Directory
       win_file:
-        path: C:\Temp
+        path: C:\SQLite
         state: directory
-    - name: Download SQLite Tools
+
+    - name: Download SQLite precompiled binaries
       win_get_url:
-        url: https://www.sqlite.org/sqlite-tools-win32-x86-3430200.zip
-        dest: C:\Temp\sqlite.zip
-      register: download_result
-    - name: Extract SQLite Tools
+        url: https://www.sqlite.org/2023/sqlite-tools-win32-x86-3430100.zip
+        dest: C:\SQLite\sqlite-tools-win32-x86-3430100.zip
+
+    - name: Extract SQLite binaries
       win_unzip:
-        src: C:\Temp\sqlite.zip
+        src: C:\SQLite\sqlite-tools-win32-x86-3430100.zip
         dest: C:\SQLite
-      when: download_result.changed
-    - name: Set SQLite Environment Variable
-      win_environment:
-        name: PATH
-        value: "{{ ansible_facts['ansible_env']['PATH'] }};C:\\SQLite"
+
+    - name: Remove Temporary Downloaded ZIP
+      win_file:
+        path: C:\SQLite\sqlite-tools-win32-x86-3430100.zip
+        state: absent
+
