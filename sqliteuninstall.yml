@@ -1,6 +1,6 @@
 ---
 - name: Uninstall SQLite on Windows
-  hosts: 10.10.5.181  # Replace with the target host where SQLite is installed
+  hosts: 172.16.0.201  # Replace with the target host where SQLite is installed
   gather_facts: no
   tasks:
     - name: Remove SQLite Files
