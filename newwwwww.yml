@@ -7,19 +7,23 @@
       win_file:
         path: C:\Temp
         state: directory
+
     - name: Download SQLite precompiled binaries
       win_get_url:
         url: https://www.sqlite.org/2023/sqlite-dll-win64-x64-3430200.zip
         dest: C:\Temp\sqlite-dll-win64-x64-3430200.zip
+
     - name: Extract SQLite binaries
       win_unzip:
         src: C:\Temp\sqlite-dll-win64-x64-3430200.zip
         dest: C:\SQLite
+
     - name: Add SQLite to PATH
       win_path:
         elements:
           - C:\SQLite
         state: present
+
     - name: Set SQLite Environment Variable
       win_environment:
         name: SQLITE_HOME
