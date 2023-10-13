@@ -3,6 +3,10 @@
   hosts: 172.16.0.201
   gather_facts: no
   tasks:
+    - name: Create Temp Directory
+      win_file:
+        path: C:\Temp
+        state: directory
     - name: Download SQLite Tools
       win_get_url:
         url: https://example.com/sqlite-tools-win32-x86-3430200.zip
@@ -16,6 +20,7 @@
     - name: Set SQLite Environment Variable
       win_environment:
         name: PATH
-        value: "{{ansible_env.PATH}};C:\\SQLite"
+        value: "{{ ansible_env.PATH }};C:\\SQLite"
       register: env_result
+ 
 
