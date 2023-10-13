@@ -1,6 +1,6 @@
 ---
 - name: Install SQLite in C:\SQLite on Windows
-  hosts: 10.10.5.184
+  hosts: 10.10.5.181
   gather_facts: no
   tasks:
     - name: Create C:\SQLite Directory
