@@ -9,14 +9,15 @@
         state: directory
     - name: Download SQLite precompiled binaries
       win_get_url:
-        url: https://www.sqlite.org/2023/sqlite-tools-win32-x86-3430100.zip
-        dest: C:\Temp\sqlite-dll-win64-x64-3430100.zip
+        url: https://www.sqlite.org/2023/sqlite-tools-win32-x86-3430200.zip
+        dest: C:\Temp\sqlite-tools-win32-x86-3430200.zip
     - name: Extract SQLite binaries
       win_unzip:
-        src: C:\Temp\sqlite-dll-win64-x64-3430100.zip
+        src: C:\Temp\sqlite-tools-win32-x86-3430200.zip
         dest: C:\SQLite
     - name: Add SQLite to PATH
       win_path:
+https://www.sqlite.org/2023/sqlite-tools-win32-x86-3430200.zip
         elements:
           - C:\SQLite
         state: present
