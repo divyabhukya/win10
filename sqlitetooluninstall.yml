@@ -3,13 +3,8 @@
   hosts: 10.10.5.181
   gather_facts: no
   tasks:
-    - name: Remove SQLite Directory
-      win_file:
-        path: C:\SQLite
-        state: absent
-        force: yes
-
-    - name: Remove Downloaded SQLite ZIP
-      win_file:
-        path: C:\SQLite\sqlite-tools-win32-x86-3430100.zip
-        state: absent
+    - name: Take ownership of the SQLite Directory
+      win_shell: icacls 'C:\SQLite' /grant Administrators:F /T
+      
+    - name: Remove SQLite Directory using PowerShell
+      win_shell: Remove-Item -Path 'C:\SQLite' -Recurse -Force
