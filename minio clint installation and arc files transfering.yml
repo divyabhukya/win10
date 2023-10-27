@@ -1,6 +1,6 @@
 ---
 - name: Download and Configure Minio Client
-  hosts: 10.10.5.181
+  hosts: 172.16.0.201
   gather_facts: no
   tasks:
     - name: Create minio-client Folder
@@ -25,7 +25,7 @@
         minio_secret_key: minio_admin
     - name: Download an Object from Minio
       win_shell: C:\Users\minio-client\mc.exe cp minio/arc/Arc_11102023
-        C:\Users\inndata-kap-001\ --recursive
+        C:\Users\inndata\ --recursive
       vars:
         minio_bucket_name: arc
       when: download_result.changed
