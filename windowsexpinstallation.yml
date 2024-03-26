@@ -1,6 +1,6 @@
 ---
 - name: Install Windows Exporter in Windows
-  hosts: 192.168.10.8
+  hosts: 172.16.0.204
   gather_facts: no
   tasks:
     - name: Create Temp Directory
