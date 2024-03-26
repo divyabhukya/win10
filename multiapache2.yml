@@ -1,10 +1,9 @@
 ---
-- name: Install Apache2
+- name: Create Directory
   hosts: all
   become: true
   tasks:
-    - name: Install Apache2
-      apt:
-        name: apache2
-        state: present
-
+    - name: Create directory
+      file:
+        path: /root/vedha
+        state: directory
