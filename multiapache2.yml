@@ -1,15 +1,10 @@
 ---
-- name: Install Apache2 on CentOS 7
+- name: Install Apache2
   hosts: all
   become: true
   tasks:
-    - name: Install Apache2 package for CentOS
-      yum:
-        name: httpd
+    - name: Install Apache2
+      apt:
+        name: apache2
         state: present
 
-    - name: Start Apache2 service
-      service:
-        name: httpd
-        state: started
-        enabled: yes
