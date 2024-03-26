@@ -1,0 +1,17 @@
+---
+- name: Install Apache2 on CentOS 7
+  hosts: 
+    - 172.16.0.252
+    - 172.16.0.221
+  become: true
+  tasks:
+    - name: Install Apache2 package for CentOS
+      yum:
+        name: httpd
+        state: present
+
+    - name: Start Apache2 service
+      service:
+        name: httpd
+        state: started
+        enabled: yes
