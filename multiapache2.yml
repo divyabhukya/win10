@@ -1,8 +1,6 @@
 ---
 - name: Install Apache2 on CentOS 7
-  hosts: 
-    - 172.16.0.252
-    - 172.16.0.221
+  hosts: all
   become: true
   tasks:
     - name: Install Apache2 package for CentOS
