@@ -3,13 +3,13 @@
   hosts: all
   become: true
   tasks:
-    - name: Install Apache2 package
-      apt:
-        name: apache2
+    - name: Install Apache package
+      yum:
+        name: httpd
         state: present
 
-    - name: Ensure Apache2 service is running
+    - name: Ensure Apache service is running
       service:
-        name: apache2
+        name: httpd
         state: started
         enabled: true
